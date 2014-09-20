@@ -18,6 +18,8 @@ from controllers import IndexHandler
 from controllers import UsersHandler
 from controllers import CommentsHandler
 from controllers import CommentedHandler
+from controllers import ChatgroupsHandler
+from controllers import MessagesHandler
 
 def get_url_list():
 
@@ -44,6 +46,15 @@ def get_url_list():
 
         # Put/Get User
         tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)', UsersHandler, name='users'),
+
+        # Create a chat group
+        tornado.web.URLSpec(r'/api/v1/chatgroup', ChatgroupsHandler, name='chatgroups'),
+
+        # Update / Get / Delete a chat group
+        tornado.web.URLSpec(r'/api/v1/chatgroup/([a-zA-Z0-9]+)', ChatgroupsHandler, name='chatgroups'),
+
+        # Create a message
+        tornado.web.URLSpec(r'/api/v1/chatgroup/([a-zA-Z0-9]+)/message', MessagesHandler, name='messages'),
 
     ]
 

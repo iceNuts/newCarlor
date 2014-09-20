@@ -21,6 +21,7 @@ class User
   key :driver_flag, Bool 
 
   key :email_verified, Bool
+  key :phone_verified, Bool
 
   many :comments
   many :photos
