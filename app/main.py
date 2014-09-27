@@ -32,17 +32,17 @@ def get_url_list():
         # Create User
         tornado.web.URLSpec(r'/api/v1/user/new', UsersHandler, name='users'),
         
-        # Create User Comment
-        tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)/comment/new', CommentsHandler, name='comments'),
+        # Create event Comment
+        tornado.web.URLSpec(r'/api/v1/event/([a-zA-Z0-9]+)/comment/new', CommentsHandler, name='comments'),
 
-        # Put/Delete User Comment
-        tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)/comment/([a-zA-Z0-9]+)', CommentsHandler, name='comments'),
+        # Put/Delete event Comment
+        tornado.web.URLSpec(r'/api/v1/event/([a-zA-Z0-9]+)/comment/([a-zA-Z0-9]+)', CommentsHandler, name='comments'),
 
-        # Get User Comments
-        tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)/comments/([0-9]+)', CommentsHandler, name='comments'),
+        # Get event Comments
+        tornado.web.URLSpec(r'/api/v1/event/([a-zA-Z0-9]+)/comments/([0-9]+)', CommentsHandler, name='comments'),
 
-        # Get User Commented
-        tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)/commented/([0-9]+)', CommentedHandler, name='commented'),
+        # Get event Commented
+        tornado.web.URLSpec(r'/api/v1/event/([a-zA-Z0-9]+)/commented/([0-9]+)', CommentedHandler, name='commented'),
 
         # Put/Get User
         tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)', UsersHandler, name='users'),
