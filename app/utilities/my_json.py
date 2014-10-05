@@ -16,7 +16,7 @@ def clean_bson(input):
                 output[key] = clean_list(input[key])
             elif type(input[key]) == dict:
                 output[key] = clean_dict(input[key])
-            elif type(input[key]) == ObjectId:
+            elif type(input[key]) == ObjectId or type(input[key]) == unicode:
                 output[key] = str(input[key])
             elif type(input[key]) == datetime:
                 output[key] = clean_strtime(input[key])
@@ -43,7 +43,7 @@ def clean_dict(input):
 
     output = {}
     for key in input:
-        if type(input[key]) == ObjectId:
+        if type(input[key]) == ObjectId or type(input[key]) == unicode:
             output[key] = str(input[key])
         else:
             output[key] = input[key]

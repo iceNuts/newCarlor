@@ -14,6 +14,10 @@ class BaseHandler(tornado.web.requestHandler):
     def db(self):
         return self.settings['db']
 
+    @property
+    def data(self):
+        return tornado.escape.json_encode(self.request.body)
+
     def _handle_request_exception(self, e):
         err_msg = str(e)
         try:

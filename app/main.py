@@ -30,7 +30,13 @@ from tornado.httpserver import HTTPServer
 def get_url_list():
 
     return [
-
+        #create a new user
+        tornado.web.URLSpec(r'/api/v1/user/new', UserHandler, name='users'),
+        # update a user info
+        tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)/update', UserHandler, name='users'),
+        # get user info
+        tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)', UserHandler, name='users'),
+        
     ]
 
 
