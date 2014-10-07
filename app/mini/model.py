@@ -8,7 +8,7 @@ class DocMeta(type):
             if attr in self.defaults:
                 if not isinstance(value, self.defaults[attr]):
                     raise TypeError('%s cannot be %s' % (attr, value))
-            else:                        
+            else: 
                 raise TypeError('MongoDB document is frozen')
 
         def _setattr(self, attr, value):
@@ -25,10 +25,6 @@ class Document(object):
 
     __metaclass__ = DocMeta
 
-    def __init__(self):
-        super.__init__()
-        self.model_name = self.__class__.__name__
-
     # Convert to dict
     def to_dict(self):
         return self.__dict__
@@ -37,6 +33,8 @@ class Document(object):
     def update(self, entries, options={}):
         clean_entries = self.firewall(entries, options)
         for key, value in clean_entries.iteritems():
+            if isinstance(value, unicode):
+                    value = value.encode('utf-8')
             setattr(self, key, value)
 
     # delete attribute

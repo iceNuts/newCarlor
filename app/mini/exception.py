@@ -1,20 +1,19 @@
 import sys
+import bson
 
+# request exception decoration
+# naive implementation
 
-class NetworkError(Exception):
-    pass
+def request_exception(error):
+    err_msg = str(error)
+    try:
+        err_status = 500
+        if "bson" in str(type(error)):
+            err_status = 400
+        if "TypeError" in str(type(error)):
+            err_status = 400
+    except Exception, e:
+        print e
 
-class DataError(Exception):
-    pass
-
-
-# network exception decoration
-def request_exception(fn):
-    def wrapped(*args, **kwargs):
-        try:
-            return fn(*args, **kwargs)
-        except Exception, e:
-            et, ev, tb = sys.exc_info()
-            raise NetworkError, NetworkError(e), tb
-    return wrapped
+    return err_status, err_msg
 

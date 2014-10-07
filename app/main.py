@@ -19,6 +19,7 @@ from tornado.httpserver import HTTPServer
     Serialize output data and handle incoming request
 """
 
+from api import UserHandler
 
 
 
@@ -33,10 +34,10 @@ def get_url_list():
         #create a new user
         tornado.web.URLSpec(r'/api/v1/user/new', UserHandler, name='users'),
         # update a user info
-        tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)/update', UserHandler, name='users'),
+        tornado.web.URLSpec(r'/api/v1/user/update', UserHandler, name='users'),
         # get user info
         tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)', UserHandler, name='users'),
-        
+
     ]
 
 
@@ -68,6 +69,18 @@ def get_app():
     
     return application
 
+def get_ioloop():
+
+    ioloop = tornado.ioloop.IOLoop.instance()
+    return ioloop
+
+
+def stop_server(server):
+
+    logging.info('--- stopping club server ---')
+    server.stop()
+
+
 
 """ Tornado server run loop
     
@@ -84,6 +97,7 @@ def main():
         ioloop.start()
     except KeyboardInterrupt:
         stop_server(server)
+
     logging.info('--- club server stopped ---')
 
 

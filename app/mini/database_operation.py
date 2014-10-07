@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 import tornado
 from tornado import gen
@@ -9,8 +10,8 @@ from bson import ObjectId
 @gen.coroutine
 def post_doc(self, model, data):
     model.update(data, {'POST' : True})
-    yield self.db[model.model_name].insert({model.to_dict()})
-
+    future = yield self.db[model.__class__.__name__].insert(model.to_dict())
+    raise gen.Return(future)
 
 # data should contain the object id
 
@@ -19,17 +20,18 @@ def put_doc(self, model, data):
     object_id = data['_id']
     data.pop('_id')
     model.update(data, {'PUT' : True})
-    yield self.db[model.model_name].update(
+    future = yield self.db[model.__class__.__name__].update(
         {'_id' : ObjectId(object_id)},
         {'$set' : model.to_dict()})
+    raise gen.Return(future)
 
 # data should contain at least object id
 
 @gen.coroutine
 def get_doc(self, model, data):
     object_id = data['_id']
-    retval = yield self.db[model.model_name].find_one({'_id' : ObjectId(object_id)})
-    return retval
+    doc = yield self.db[model.__class__.__name__].find_one({'_id' : ObjectId(object_id)})
+    raise gen.Return(doc)
 
 # data should contain at least object id
 

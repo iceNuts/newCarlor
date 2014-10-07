@@ -20,6 +20,7 @@ class User(Document):
     email_active    = bool
     phone_active    = bool
     account_active  = bool
+    driver_license  = str
     car_id          = str   # has_a car => Car
     photo_id        = str   # has_a profilephoto => Photo 
 
