@@ -11,6 +11,7 @@ import logging
 import signal
 import time
 import motor
+import boto.sqs
 
 from tornado.httpserver import HTTPServer
 
@@ -54,16 +55,26 @@ def get_db():
 
     return motor.MotorClient().carlor 
 
+def get_sqs():
+    aws_access_id = 'AKIAIZURHIWICSIMGX7Q'
+    aws_access_key = 'AvbGBYwVVsXsOoQUXhFKc6oRPdXF9cCbC0GBz7BC'
+    conn = boto.sqs.connect_to_region(
+        'us-west-2',
+        aws_access_key_id=aws_access_id,
+        aws_secret_access_key=aws_access_key)
+    return conn
 
 def get_app():
 
     url_list = get_url_list()
     settings = get_settings()
     db = get_db()
+    sqs = get_sqs()
 
     application = tornado.web.Application (
         url_list,
         db = db,
+        sqs = sqs,
         **settings
     )
     

@@ -17,6 +17,10 @@ class BaseHandler(tornado.web.RequestHandler):
         return self.settings['db']
 
     @property
+    def queue(self):
+        return self.settings['sqs']
+
+    @property
     def data(self):
         return json.loads(self.request.body)
 

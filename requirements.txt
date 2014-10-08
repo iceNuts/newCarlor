@@ -8,3 +8,4 @@ pycares
 monotime
 motor
 pudb
+boto
