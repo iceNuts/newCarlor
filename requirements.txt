@@ -1,3 +1,4 @@
+virtualenv
 tornado
 redis
 tornado-redis

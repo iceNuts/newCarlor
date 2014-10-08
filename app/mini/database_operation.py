@@ -11,7 +11,7 @@ from bson import ObjectId
 def post_doc(self, model, data):
     model.update(data, {'POST' : True})
     future = yield self.db[model.__class__.__name__].insert(model.to_dict())
-    raise gen.Return(future)
+    return future
 
 # data should contain the object id
 
@@ -23,7 +23,7 @@ def put_doc(self, model, data):
     future = yield self.db[model.__class__.__name__].update(
         {'_id' : ObjectId(object_id)},
         {'$set' : model.to_dict()})
-    raise gen.Return(future)
+    return future
 
 # data should contain at least object id
 
@@ -31,7 +31,7 @@ def put_doc(self, model, data):
 def get_doc(self, model, data):
     object_id = data['_id']
     doc = yield self.db[model.__class__.__name__].find_one({'_id' : ObjectId(object_id)})
-    raise gen.Return(doc)
+    return doc
 
 # data should contain at least object id
 
