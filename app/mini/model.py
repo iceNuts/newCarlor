@@ -32,9 +32,9 @@ class Document(object):
     # Convert to class
     def update(self, entries, options={}):
         clean_entries = self.firewall(entries, options)
-        for key, value in clean_entries.iteritems():
-            if isinstance(value, unicode):
-                    value = value.encode('utf-8')
+        for key, value in clean_entries.items():
+            # if isinstance(value, unicode):
+            #         value = value.encode('utf-8')
             setattr(self, key, value)
 
     # delete attribute

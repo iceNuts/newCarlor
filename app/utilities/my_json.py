@@ -20,14 +20,12 @@ def clean_bson(input):
                 output[key] = clean_dict(input[key])
             elif type(input[key]) == ObjectId:
                 output['_id'] = str(input[key])
-            elif type(input[key]) == unicode:
-                output[key] = input[key].encode('utf-8')
             elif type(input[key]) == datetime:
                 output[key] = clean_strtime(input[key])
             else:
                 output[key] = input[key]
         return output
-    except Exception, e:
+    except Exception as e:
         logging.info(e)
         return output
 
@@ -49,8 +47,6 @@ def clean_dict(input):
     for key in input:
         if type(input[key]) == ObjectId:
             output['_id'] = str(input[key])
-        elif type(input[key]) == unicode:
-            output[key] = input[key].encode('utf-8')
         else:
             output[key] = input[key]
     return output

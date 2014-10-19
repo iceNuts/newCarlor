@@ -10,7 +10,7 @@ from bson import ObjectId
 @gen.coroutine
 def post_doc(self, model, data):
     model.update(data, {'POST' : True})
-    future = yield self.db[model.__class__.__name__].insert(model.to_dict())
+    future = self.db[model.__class__.__name__].insert(model.to_dict())
     return future
 
 # data should contain the object id
@@ -20,7 +20,7 @@ def put_doc(self, model, data):
     object_id = data['_id']
     data.pop('_id')
     model.update(data, {'PUT' : True})
-    future = yield self.db[model.__class__.__name__].update(
+    future = self.db[model.__class__.__name__].update(
         {'_id' : ObjectId(object_id)},
         {'$set' : model.to_dict()})
     return future
@@ -30,7 +30,7 @@ def put_doc(self, model, data):
 @gen.coroutine
 def get_doc(self, model, data):
     object_id = data['_id']
-    doc = yield self.db[model.__class__.__name__].find_one({'_id' : ObjectId(object_id)})
+    doc = self.db[model.__class__.__name__].find_one({'_id' : ObjectId(object_id)})
     return doc
 
 # data should contain at least object id
