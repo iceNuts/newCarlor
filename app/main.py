@@ -24,6 +24,7 @@ from tornado.httpserver import HTTPServer
 from api import UserHandler
 from api import ChatgroupHandler
 from api import APNsHandler
+from api import MessageHandler
 
 
 """ Tornado App Configuration
@@ -47,11 +48,14 @@ def get_url_list():
         # get user info
         tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)', UserHandler),
 
-        #create a new user
+        # create a new user
         tornado.web.URLSpec(r'/api/v1/chatgroup/new', ChatgroupHandler),
     
-        #create a new APNs
+        # create a new APNs
         tornado.web.URLSpec(r'/api/v1/apns/new', APNsHandler),
+
+        # shoot a message to a chatgroup
+        tornado.web.URLSpec(r'/api/v1/message/new', MessageHandler),
     ]
 
 

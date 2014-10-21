@@ -6,6 +6,7 @@ import tornado
 from tornado import gen
 from mini import Document
 from bson import ObjectId
+import collections
 
 class ChatGroup(Document):
     event_id        = str   #   associated event id (PUBLIC) / or nil as private
@@ -14,7 +15,7 @@ class ChatGroup(Document):
     members         = list  #   user id list
     name            = str
     capacity        = int   #   default as 10 (UPGRADEABLE)
-    photo_id        = str   #   ChatGroup description photo
+    photo           = str   #   ChatGroup description photo
     description     = str
     lottery         = bool  # if event needs lottery
 
@@ -23,13 +24,13 @@ class ChatGroup(Document):
 
     # make chatgroup subscribers
     @gen.coroutine
-    def subscribers(self):
-        users = collections.deque()
-        subscribers = collections.deque()
-        users.append(ObjectId(self.host_user_id))
-        for uid in members:
-            users.append(ObjectId(uid))
-        cursor = self.db.APNs.find({'_id' : users})
+    def subscribers(self, handler):
+        users = []
+        subscribers = []
+        users.append(self.host_user_id)
+        for uid in self.members:
+            users.append(uid)
+        cursor = handler.db.APNs.find({'user_id' : {'$in' : users}})
         while(yield cursor.fetch_next):
             a = cursor.next_object()
             subscribers.append(

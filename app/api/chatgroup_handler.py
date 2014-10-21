@@ -24,7 +24,7 @@ class ChatgroupHandler(BaseHandler):
         chatgroup = ChatGroup()
         yield aws.create_topic(self, chatgroup)
         yield post_doc(self, chatgroup, self.data)
-        subscribers = yield chatgroup.subscribers()
+        subscribers = yield chatgroup.subscribers(self)
         yield aws.subscribe_topic(self, chatgroup.topic_arn, subscribers)
         self.write_json({'result' : 'OK'})
 
@@ -45,3 +45,10 @@ class ChatgroupHandler(BaseHandler):
     @gen.coroutine
     def delete(self, chatgroup_id=''):
         pass
+
+
+
+
+
+
+

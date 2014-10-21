@@ -5,6 +5,22 @@ from tornado import gen
 import calendar
 import hashlib
 from datetime import datetime
+from bson import ObjectId
+
+# shoot a message to chatgroup
+
+@gen.coroutine
+def shoot_message(self):
+    chatgroup_id = self.data['chatgroup_id']
+    chatgroup = yield self.db.ChatGroup.find_one({'_id' : ObjectId(chatgroup_id)})
+    topic_arn = chatgroup['topic_arn']
+    message = self.data['message']
+    message_attributes = self.data['message_attributes']
+    self.sns.publish(
+        topic_arn,
+        message,
+        message_attributes
+        )
 
 # add an endpoint to application
 
@@ -50,3 +66,11 @@ def subscribe_topic(self, topic_arn, subscribers):
             topic_arn, 
             subscriber['protocol'], 
             subscriber['endpoint'])
+
+
+
+
+
+
+
+
