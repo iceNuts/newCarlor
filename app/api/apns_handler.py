@@ -16,6 +16,7 @@ from bson import ObjectId
 from models import APNs
 from mini import aws
 
+
 class APNsHandler(BaseHandler):
 
     # create a new APNs and subscribe to AWS App
@@ -24,7 +25,7 @@ class APNsHandler(BaseHandler):
         apns = APNs()
         yield aws.app_add_endpoint(self, apns)
         yield post_doc(self, apns, self.data)
-        self.write_json({'result' : 'OK'})
+        self.write_json({'result': 'OK'})
 
     # delete APNs and unsubscribe to AWS App
     @gen.coroutine

@@ -5,6 +5,7 @@
 from mini import Document
 from datetime import datetime
 
+
 class Friend(Document):
-    foo_uid     = str
-    bar_uid     = str
+    foo_uid = str
+    bar_uid = str

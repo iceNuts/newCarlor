@@ -2,13 +2,15 @@
 #
 # Base Model
 
+
 class DocMeta(type):
+
     def __new__(meta, name, bases, dict):
         def _check(self, attr, value):
             if attr in self.defaults:
                 if not isinstance(value, self.defaults[attr]):
                     raise TypeError('%s cannot be %s' % (attr, value))
-            else: 
+            else:
                 raise TypeError('MongoDB document is frozen')
 
         def _setattr(self, attr, value):
@@ -20,6 +22,7 @@ class DocMeta(type):
         cls.defaults = {name: value for name, value in dict.items()}
         cls.__setattr__ = _setattr
         return cls
+
 
 class Document(object):
 
@@ -39,7 +42,7 @@ class Document(object):
 
     # delete attribute
     def delete(self, key):
-        if self.__dict__.has_key(key):
+        if key in self.__dict__:
             self.__dict__.pop(key)
 
     # Clear all stored values
@@ -47,5 +50,6 @@ class Document(object):
         self.__dict__.clear()
 
     """ OVERRIDE this method to PROTECT document update """
+
     def firewall(self, dirty_entries, options={}):
         return dirty_entries

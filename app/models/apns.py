@@ -5,8 +5,8 @@
 
 from mini import Document
 
-class APNs(Document):
-    device_token        = str
-    user_id             = str
-    aws_endpoint_arn    = str
 
+class APNs(Document):
+    device_token = str
+    user_id = str
+    aws_endpoint_arn = str

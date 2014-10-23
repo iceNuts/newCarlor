@@ -16,10 +16,11 @@ from bson import ObjectId
 from models import ChatGroup
 from mini import aws
 
+
 class MessageHandler(BaseHandler):
 
     # shoot a message to aws topic subscriber
     @gen.coroutine
     def post(self):
         yield aws.shoot_message(self)
-        self.write_json({'result' : 'OK'})
+        self.write_json({'result': 'OK'})

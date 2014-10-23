@@ -1,15 +1,12 @@
 # encoding: utf-8
-#   
+#
 # web server main app
 
 import tornado.ioloop
 import tornado.web
 import tornado.options
 
-import functools
 import logging
-import signal
-import time
 import motor
 import boto.sqs
 import boto.sns
@@ -17,7 +14,7 @@ import boto.sns
 from tornado.httpserver import HTTPServer
 
 """ Require API Controllers
-    
+
     Serialize output data and handle incoming request
 """
 
@@ -31,6 +28,7 @@ from api import MessageHandler
 
 """
 
+
 def aws_account():
     aws_access_id = 'AKIAIZURHIWICSIMGX7Q'
     aws_access_key = 'AvbGBYwVVsXsOoQUXhFKc6oRPdXF9cCbC0GBz7BC'
@@ -41,7 +39,7 @@ def aws_account():
 def get_url_list():
 
     return [
-        #create a new user
+        # create a new user
         tornado.web.URLSpec(r'/api/v1/user/new', UserHandler),
         # update a user info
         tornado.web.URLSpec(r'/api/v1/user/update', UserHandler),
@@ -50,7 +48,7 @@ def get_url_list():
 
         # create a new user
         tornado.web.URLSpec(r'/api/v1/chatgroup/new', ChatgroupHandler),
-    
+
         # create a new APNs
         tornado.web.URLSpec(r'/api/v1/apns/new', APNsHandler),
 
@@ -70,10 +68,11 @@ def get_settings():
 
 def get_db():
 
-    return motor.MotorClient().carlor 
+    return motor.MotorClient().carlor
+
 
 def get_sqs():
-    
+
     aws_access_id, aws_access_key = aws_account()
 
     conn = boto.sqs.connect_to_region(
@@ -81,6 +80,7 @@ def get_sqs():
         aws_access_key_id=aws_access_id,
         aws_secret_access_key=aws_access_key)
     return conn
+
 
 def get_sns():
 
@@ -92,6 +92,7 @@ def get_sns():
         aws_secret_access_key=aws_access_key)
     return conn
 
+
 def get_app():
 
     url_list = get_url_list()
@@ -100,15 +101,16 @@ def get_app():
     sqs = get_sqs()
     sns = get_sns()
 
-    application = tornado.web.Application (
+    application = tornado.web.Application(
         url_list,
-        db = db,
-        sqs = sqs,
-        sns = sns,
+        db=db,
+        sqs=sqs,
+        sns=sns,
         **settings
     )
-    
+
     return application
+
 
 def get_ioloop():
 
@@ -122,10 +124,10 @@ def stop_server(server):
     server.stop()
 
 
-
 """ Tornado server run loop
-    
+
 """
+
 
 def main():
 
@@ -142,7 +144,5 @@ def main():
     logging.info('--- club server stopped ---')
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()
-
-

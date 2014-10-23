@@ -4,6 +4,7 @@
 
 from mini import Document
 
+
 class Photo(Document):
-    object_id   = str   #   associated object id
-    s3_link     = str   #   photo link
+    object_id = str  # associated object id
+    s3_link = str  # photo link

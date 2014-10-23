@@ -4,6 +4,7 @@ import bson
 # request exception decoration
 # naive implementation
 
+
 def request_exception(error):
     err_msg = str(error)
     try:
@@ -16,4 +17,3 @@ def request_exception(error):
         print(e)
 
     return err_status, err_msg
-

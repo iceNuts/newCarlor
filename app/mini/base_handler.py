@@ -10,6 +10,7 @@ from tornado import gen
 from utilities import my_json
 from tornado.escape import json_encode
 
+
 class BaseHandler(tornado.web.RequestHandler):
 
     @property
@@ -20,7 +21,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def sqs(self):
         return self.settings['sqs']
 
-    @property 
+    @property
     def sns(self):
         return self.settings['sns']
 
@@ -32,7 +33,7 @@ class BaseHandler(tornado.web.RequestHandler):
         err_status, err_msg = request_exception(e)
         self.set_status(err_status)
         self.set_header("Content-Type", "application/json")
-        self.finish({'error' : err_msg})
+        self.finish({'error': err_msg})
 
     def write_json(self, data):
         data = self.clean_dict(data)
