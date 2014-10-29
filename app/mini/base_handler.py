@@ -1,12 +1,8 @@
 # encoding: utf-8
 
 import tornado
-import logging
-import sys
-import re
 import json
 from .exception import request_exception
-from tornado import gen
 from utilities import my_json
 from tornado.escape import json_encode
 
@@ -35,8 +31,10 @@ class BaseHandler(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json")
         self.finish({'error': err_msg})
 
-    def write_json(self, data):
-        data = self.clean_dict(data)
+    def write_json(self, data, is_clean=True):
+        if not is_clean:
+            data = self.clean_dict(data)
+
         self.set_header("Content-Type", "application/json")
         self.write(json_encode(data))
 

@@ -30,6 +30,14 @@ pip install -p requirements.txt
 
 ```
 
+Install MongoDB
+---------------
+install MongoDB via home brew
+```
+brew install mongodb
+```
+run service with `mongod` command.
+
 Get Running
 -----------
 ```
