@@ -7,3 +7,7 @@ monotime
 motor
 pudb
 boto
+motorengine
+werkzeug
+itsdangerous
+simplejson

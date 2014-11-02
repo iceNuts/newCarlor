@@ -8,6 +8,8 @@ import tornado.options
 
 import logging
 import motor
+from motorengine import connect
+
 import boto.sqs
 import boto.sns
 
@@ -18,10 +20,8 @@ from tornado.httpserver import HTTPServer
     Serialize output data and handle incoming request
 """
 
-from api import UserHandler
-from api import ChatgroupHandler
-from api import APNsHandler
-from api import MessageHandler
+from api import (UserHandler, AuthTokenHandler, ChatgroupHandler,
+                 APNsHandler, MessageHandler)
 
 
 """ Tornado App Configuration
@@ -40,11 +40,12 @@ def get_url_list():
 
     return [
         # create a new user
-        tornado.web.URLSpec(r'/api/v1/user/new', UserHandler),
+        tornado.web.URLSpec(r'/api/v1/user/', UserHandler),
         # update a user info
         tornado.web.URLSpec(r'/api/v1/user/update', UserHandler),
         # get user info
         tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)', UserHandler),
+        tornado.web.URLSpec(r'/api/v1/token', AuthTokenHandler),
 
         # create a new user
         tornado.web.URLSpec(r'/api/v1/chatgroup/new', ChatgroupHandler),
@@ -60,10 +61,15 @@ def get_url_list():
 def get_settings():
 
     return {
-        'cookie_secret': '_&xC#!~-2987UYWq|{RClubCIL}o><?[]axWERFC@',
+        'secret': '_&xC#!~-2987UYWq|{RClubCIL}o><?[]axWERFC@',
+        'expires': 360,
         'login_url': '/api/login',
         'debug': True
     }
+
+
+def conn_db(io_loop):
+    connect("carlor", io_loop=io_loop)
 
 
 def get_db():
@@ -97,13 +103,11 @@ def get_app():
 
     url_list = get_url_list()
     settings = get_settings()
-    db = get_db()
     sqs = get_sqs()
     sns = get_sns()
 
     application = tornado.web.Application(
         url_list,
-        db=db,
         sqs=sqs,
         sns=sns,
         **settings
@@ -136,6 +140,7 @@ def main():
     server = HTTPServer(application)
     server.listen(80)
     ioloop = get_ioloop()
+    conn_db(ioloop)
     try:
         ioloop.start()
     except KeyboardInterrupt:

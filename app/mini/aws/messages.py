@@ -64,8 +64,6 @@ def create_topic(self, chatgroup):
     }
     chatgroup.update(data)
 
-# subscribe a topic
-
 
 @gen.coroutine
 def subscribe_topic(self, topic_arn, subscribers):
