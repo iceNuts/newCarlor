@@ -121,6 +121,14 @@ def stop_server(server):
     logging.info('--- stopping club server ---')
     server.stop()
 
+def get_ssl():
+
+    data_dir = '../'
+
+    return {
+                "certfile": os.path.join(data_dir, "server.crt"),
+                "keyfile": os.path.join(data_dir, "server.key")
+           }
 
 
 """ Tornado server run loop
@@ -131,7 +139,7 @@ def main():
 
     application = get_app()
     tornado.options.parse_command_line()
-    server = HTTPServer(application)
+    server = HTTPServer(application, ssl_options=get_ssl())
     server.listen(80)
     ioloop = get_ioloop()
     try:
