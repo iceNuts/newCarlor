@@ -29,7 +29,7 @@ class BaseHandler(tornado.web.RequestHandler):
         return json.loads(self.request.body.decode('utf-8'))
 
     @tornado.gen.coroutine
-    def get_current_user(self):
+    def get_auth_user(self):
         scheme, _, token = self.request.headers.get('Authorization', '')\
             .partition(' ')
 
@@ -65,3 +65,17 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def clean_dict(self, data):
         return my_json.clean_bson(data)
+
+
+#def login_required(fun):
+    #def __decorator(self, *args, **kw):
+        #user = yield self.get_auth_user()
+        #print(user)
+        #if not user:
+            #print('hi')
+            #self.send_error(403)
+
+        #self.current_user = user
+        #fun(*args, **kw)
+
+    #return __decorator

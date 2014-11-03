@@ -40,11 +40,10 @@ def get_url_list():
 
     return [
         # create a new user
-        tornado.web.URLSpec(r'/api/v1/user/', UserHandler),
-        # update a user info
-        tornado.web.URLSpec(r'/api/v1/user/update', UserHandler),
+        tornado.web.URLSpec(r'/api/v1/user$', UserHandler),
         # get user info
         tornado.web.URLSpec(r'/api/v1/user/([a-zA-Z0-9]+)', UserHandler),
+        # get login token
         tornado.web.URLSpec(r'/api/v1/token', AuthTokenHandler),
 
         # create a new user

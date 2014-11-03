@@ -8,8 +8,6 @@ class AuthTokenHandler(BaseHandler):
 
     @gen.coroutine
     def post(self):
-        user = yield self.current_user
-
         email = self.data['email']
         password = self.data['password']
         user = yield get_user(email, password)
@@ -20,4 +18,4 @@ class AuthTokenHandler(BaseHandler):
         secret = self.settings['secret']
 
         token = user.create_token(secret)
-        self.write_json({'token': str(token)})
+        self.write_json({'token': token.decode('utf-8')})
