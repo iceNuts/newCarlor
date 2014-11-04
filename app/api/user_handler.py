@@ -4,7 +4,7 @@
 from werkzeug.security import generate_password_hash
 
 from tornado import gen
-from mini import BaseHandler
+from mini import BaseHandler, async_login_required
 
 """ COMMON DEPENDENCIES """
 
@@ -33,33 +33,27 @@ class UserHandler(BaseHandler):
 
         user = User(**data)
         yield user.save()
-        token = self.create_token(self.settings['secret'])
+        token = user.create_token()
         user_info = user.get_info()
 
         self.write_json({
-            'token': token,
+            'token': token.decode('utf-8'),
             'user': user_info,
         })
 
     # update a user information
+    @async_login_required
     @gen.coroutine
     def put(self):
-        current_user = yield self.get_auth_user()
-
-        if not current_user:
-            self.send_error(403)
-
+        current_user = self.current_user
         yield current_user.save_info(self.data)
 
         self.write_json({'result': 'OK'})
 
     # get user information
+    @async_login_required
     @gen.coroutine
     def get(self, uid=''):
-        current_user = yield self.get_auth_user()
-        if not current_user:
-            self.send_error(403)
-
         user = yield User.objects.get(uid)
         info = user.get_info()
         self.write_json({

@@ -8,6 +8,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer,
 from mini import EnumField
 from motorengine import (Document, StringField, DateTimeField,
                          BooleanField, EmailField)
+from settings import settings
 
 
 class User(Document):
@@ -37,8 +38,8 @@ class User(Document):
         'car_id', 'photo_id',
     ]
 
-    def create_token(self, secret, expiration=60000):
-        s = Serializer(secret, expires_in=expiration)
+    def create_token(self, expiration=60000):
+        s = Serializer(settings['secret'], expires_in=expiration)
         return s.dumps({'id': str(self._id)})
 
     def get_info(self):
@@ -48,6 +49,11 @@ class User(Document):
             info['id'] = str(self._id)
 
         return info
+
+    def get_reset_password_link(self):
+        # 2 hours ?
+        token = self.create_token(60 * 60 * 2)
+        return '/account/resetpassword?t=' + token.decode('utf-8')
 
     @gen.coroutine
     def save_info(self, data):

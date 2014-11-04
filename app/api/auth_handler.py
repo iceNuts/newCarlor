@@ -1,21 +1,13 @@
 from tornado import gen
-
-from utilities.auth import get_user
-from mini import BaseHandler
+from mini import BaseHandler, async_login_required
 
 
 class AuthTokenHandler(BaseHandler):
 
+    @async_login_required
     @gen.coroutine
     def post(self):
-        email = self.data['email']
-        password = self.data['password']
-        user = yield get_user(email, password)
+        current_user = self.current_user
 
-        if not user:
-            self.send_error(403)
-
-        secret = self.settings['secret']
-
-        token = user.create_token(secret)
+        token = current_user.create_token()
         self.write_json({'token': token.decode('utf-8')})

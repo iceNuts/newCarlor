@@ -3,9 +3,11 @@
 import tornado
 import json
 import base64
+from functools import wraps
 from .exception import request_exception
 from utilities import my_json
 from tornado.escape import json_encode
+from tornado import gen
 from models import User
 from utilities.auth import get_user
 
@@ -67,15 +69,31 @@ class BaseHandler(tornado.web.RequestHandler):
         return my_json.clean_bson(data)
 
 
-#def login_required(fun):
-    #def __decorator(self, *args, **kw):
-        #user = yield self.get_auth_user()
-        #print(user)
-        #if not user:
-            #print('hi')
-            #self.send_error(403)
+def async_login_required(fun):
+    @wraps(fun)
+    @gen.coroutine
+    def __decorator(self, *args, **kw):
+        user = yield self.get_auth_user()
+        if not user:
+            self.send_error(403)
+            return
 
-        #self.current_user = user
-        #fun(*args, **kw)
+        self.current_user = user
+        yield fun(self, *args, **kw)
 
-    #return __decorator
+    return __decorator
+
+
+def login_required(fun):
+    @wraps(fun)
+    @gen.coroutine
+    def __decorator(self, *args, **kw):
+        user = yield self.get_auth_user()
+        if not user:
+            self.send_error(403)
+            return
+
+        self.current_user = user
+        fun(self, *args, **kw)
+
+    return __decorator
