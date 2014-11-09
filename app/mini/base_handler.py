@@ -13,10 +13,6 @@ from tornado.escape import json_encode
 class BaseHandler(tornado.web.RequestHandler):
 
     @property
-    def db(self):
-        return self.settings['db']
-
-    @property
     def sqs(self):
         return self.settings['sqs']
 

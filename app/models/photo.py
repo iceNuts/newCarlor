@@ -2,8 +2,10 @@
 #
 # Photo Model
 
-from mini import Document
+from motorengine import *
 
 class Photo(Document):
-    object_id   = str   #   associated object id
-    s3_link     = str   #   photo link
+    #   associated object id
+    object_id   = StringField(required=True)
+    #   photo link
+    s3_link     = URLField(required=True)   

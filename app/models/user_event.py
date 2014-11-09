@@ -2,18 +2,19 @@
 #
 # UserEvent Model
 
-from mini import Document
+from motorengine import *
 from datetime import datetime
 
 class UserEvent(Document):
-    name            = str
-    host_user_id    = str   #  user id
-    detail          = str
-    location        = dict  #  2dsphere
-    start_time      = datetime
-    end_time        = datetime
-    photo_id        = str
-    capacity        = int
-    likes           = int
+    name            = StringField(required=True)
+    #  user id
+    host_user_id    = StringField(required=True)   
+    detail          = StringField(required=True)
+    #  2dsphere
+    location        = JsonField()  
+    start_time      = DateTimeField(required=True)
+    end_time        = DateTimeField(required=True)
+    photo_id        = StringField()
+    capacity        = IntField(default=10)
 
 

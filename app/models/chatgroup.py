@@ -4,23 +4,46 @@
 
 import tornado
 from tornado import gen
-from mini import Document
+from motorengine import *
 from bson import ObjectId
 import collections
 
 class ChatGroup(Document):
-    event_id        = str   #   associated event id (PUBLIC) / or nil as private
-    in_party        = bool  #   True means special event 
-    host_user_id    = str   #   host user id
-    members         = list  #   user id list
-    name            = str
-    capacity        = int   #   default as 10 (UPGRADEABLE)
-    photo           = str   #   ChatGroup description photo
-    description     = str
-    lottery         = bool  # if event needs lottery
+    #   associated event id (PUBLIC) / or nil as private
+    event_id        = StringField(required=True)  
+    #   1 means special event  
+    in_party        = IntField(required=True, min_value=0, max_value=1)  
+    #   host user id
+    host_user_id    = StringField(required=True)   
+    #   user id list
+    members         = ListField(StringField())  
+    name            = StringField()
+    #   default as 10 (UPGRADEABLE)
+    capacity        = IntField(default=10)  
+    #   ChatGroup description photo 
+    photo_id        = StringField()   
+    description     = StringField()
+    # 1 if event needs lottery
+    lottery         = IntField(min_value=0, max_value=1)   
+    # AWS topic arn 
+    topic_arn       = StringField(required=True) 
+    # AWS stored topic name  
+    stored_topic_name = StringField(required=True) 
 
-    topic_arn       = str   # AWS topic arn 
-    stored_topic_name = str # AWS stored topic name
+    # OVERRIDE THIS TO PROTECT YOUR DATA
+    # SET SOME DEFAULT VALUE
+    # CHECK KEY NAME
+    # CONVERT TO PROPER TYPE
+    @classmethod
+    def firewall(self, dirty_entries, options={}):
+        
+        return dirty_entries
+
+    # FILTER OUT SOME SENSITIVE FIELDS
+    @classmethod
+    def outputer(self, incoming, options={}):
+
+        return incoming
 
     # make chatgroup subscribers
     @gen.coroutine
@@ -30,9 +53,9 @@ class ChatGroup(Document):
         users.append(self.host_user_id)
         for uid in self.members:
             users.append(uid)
-        cursor = handler.db.APNs.find({'user_id' : {'$in' : users}})
-        while(yield cursor.fetch_next):
-            a = cursor.next_object()
+        query = Q(user_id__in=users)
+        result = yield APNs.objects.filter(query).find_all()
+        for a in result:
             subscribers.append(
                 {
                     'protocol' : 'application',

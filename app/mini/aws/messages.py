@@ -25,29 +25,28 @@ def shoot_message(self):
 # add an endpoint to application
 
 @gen.coroutine
-def app_add_endpoint(self, apns):
+def app_add_endpoint(self, device_token):
     aws_ios_app_arn = 'arn:aws:sns:us-west-2:878165105740:app/APNS_SANDBOX/CarlorDev'
     response = self.sns.create_platform_endpoint(
         aws_ios_app_arn,
-        self.data['device_token']
+        device_token
         )
     aws_endpoint_arn = response['CreatePlatformEndpointResponse']['CreatePlatformEndpointResult']['EndpointArn']
-    data = {
-        'aws_endpoint_arn' : aws_endpoint_arn
-    }
-    apns.update(data)
+    return aws_endpoint_arn
 
 @gen.coroutine
-def app_delete_endpoint(self):
+def app_delete_endpoint(self, aws_arn):
     # delete_endpoint
-    pass
+    response = self.sns.delete_endpoint(aws_arn)
+    if response.status != 200:
+        raise Exception('Remote APNs Delete Failed')
 
 # create a topic and direct it to an app
 
 @gen.coroutine
-def create_topic(self, chatgroup):
+def create_topic(self, topic_name):
     current_timestamp = calendar.timegm(datetime.utcnow().utctimetuple())
-    topic_var = self.data['name'].encode('utf-8')+str(current_timestamp).encode('utf-8')
+    topic_var = topic_name+str(current_timestamp).encode('utf-8')
     stored_topic_name = hashlib.md5(topic_var).hexdigest()
     response = self.sns.create_topic(stored_topic_name)
     topic_arn = response['CreateTopicResponse']['CreateTopicResult']['TopicArn']
@@ -55,7 +54,7 @@ def create_topic(self, chatgroup):
         'topic_arn' : topic_arn,
         'stored_topic_name' : stored_topic_name
     }
-    chatgroup.update(data)
+    return data
 
 # subscribe a topic
 

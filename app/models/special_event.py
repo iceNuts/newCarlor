@@ -2,20 +2,23 @@
 #
 # SpecialEvent Model
 
-from mini import Document
+from motorengine import *
 from datetime import datetime
 from bson import ObjectId
 
 class SpecialEvent(Document):
-    name        = str
-    description = str
-    location    = dict      #   contain long / short location
-    start_time  = long
-    end_time    = long
-    photo_id    = str
-    capacity    = int
-    additionals = dict      #   like discount 
-    members     = list      #   uids
+    name        = StringField(required=True)
+    description = StringField(required=True)
+    #   contain long / short location
+    start_time  = DateTimeField(required=True)
+    location    = JsonField(required=True)
+    end_time    = DateTimeField(required=True)
+    photo_id    = StringField()
+    capacity    = IntField(default=10) 
+    #   like discount  
+    additionals = JsonField()  
+    #   uids    
+    members     = ListField(StringField())      
 
     @gen.coroutine
     @staticmethod
@@ -81,7 +84,7 @@ class SpecialEvent(Document):
         return event_list
                 
 
-        
+
 
 
 

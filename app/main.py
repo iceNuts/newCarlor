@@ -15,6 +15,7 @@ import boto.sqs
 import boto.sns
 
 from tornado.httpserver import HTTPServer
+from motorengine import *
 
 """ Require API Controllers
     
@@ -68,10 +69,6 @@ def get_settings():
     }
 
 
-def get_db():
-
-    return motor.MotorClient().carlor 
-
 def get_sqs():
     
     aws_access_id, aws_access_key = aws_account()
@@ -96,13 +93,11 @@ def get_app():
 
     url_list = get_url_list()
     settings = get_settings()
-    db = get_db()
     sqs = get_sqs()
     sns = get_sns()
 
     application = tornado.web.Application (
         url_list,
-        db = db,
         sqs = sqs,
         sns = sns,
         **settings
@@ -142,6 +137,7 @@ def main():
     server = HTTPServer(application, ssl_options=get_ssl())
     server.listen(80)
     ioloop = get_ioloop()
+    connect('carlor', io_loop=ioloop)
     try:
         ioloop.start()
     except KeyboardInterrupt:

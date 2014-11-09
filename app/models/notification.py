@@ -2,7 +2,7 @@
 #
 # Notification Model
 
-from mini import Document
+from motorengine import *
 from datetime import datetime
 
 # Handle :

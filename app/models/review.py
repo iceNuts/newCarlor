@@ -2,13 +2,14 @@
 #
 # Review Model
 
-from mini import Document
+from motorengine import *
 from datetime import datetime
 
 class Review(Document):
-    event_id    = str   # must be special event
-    user_id     = str   # who wrote this
-    time        = datetime
-    detail      = str
-    title       = str
-    likes       = int
+    # must be special event
+    event_id    = StringField(required=True)   
+    # who wrote this
+    user_id     = StringField(required=True)   
+    time        = DateTimeField(auto_now_on_insert=True)
+    detail      = StringField(required=True)
+    title       = StringField(required=True)

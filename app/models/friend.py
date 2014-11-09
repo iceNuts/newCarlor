@@ -2,9 +2,8 @@
 #
 # Friend Model
 
-from mini import Document
-from datetime import datetime
+from motorengine import *
 
 class Friend(Document):
-    foo_uid     = str
-    bar_uid     = str
+    foo_uid     = StringField(required=True)
+    bar_uid     = StringField(required=True)

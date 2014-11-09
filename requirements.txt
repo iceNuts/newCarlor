@@ -11,3 +11,4 @@ motor
 pudb
 boto
 motorengine
+blinker

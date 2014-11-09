@@ -2,11 +2,11 @@
 #
 # Car Model
 
-from mini import Document
+from motorengine import *
 
 class Car(Document):
-    user_id     = str   #   user id
-    brand       = str
-    color       = str
-    plate       = str
-    capacity    = int
+    user_id     = StringField(required=True)   #    user id
+    brand       = StringField(required=True)
+    color       = StringField(required=True)   #    hex string
+    plate       = StringField(required=True)
+    capacity    = IntField(required=True)
